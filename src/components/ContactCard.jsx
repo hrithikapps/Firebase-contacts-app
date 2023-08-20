@@ -4,11 +4,17 @@ import { HiOutlineUserCircle } from "react-icons/hi";
 import { IoMdTrash } from "react-icons/io";
 import { RiEditCircleLine } from "react-icons/ri";
 import AddandUpdateContact from "./AddandUpdateContact";
+import useDiscloser from "../hooks/useDiscloser";
+import { toast } from "react-toastify";
+import { db } from "../config/firebase";
 
 const ContactCard = ({ contact }) => {
+  const { isOpen, onOpen, onClose } = useDiscloser();
+
   const deleteCard = async (id) => {
     try {
       deleteDoc(doc(db, "contacts", id));
+      toast.success("Contact Deleted Successfully");
     } catch (error) {
       console.log(error);
     }
@@ -28,14 +34,19 @@ const ContactCard = ({ contact }) => {
           </div>
         </div>
         <div className="flex text-3xl items-center">
-          <RiEditCircleLine />
+          <RiEditCircleLine onClick={onOpen} className="cursor-pointer" />
           <IoMdTrash
-            onClick={deleteDoc(contact.id)}
-            className="text-orange-600"
+            onClick={() => deleteCard(contact.id)}
+            className="text-orange-600 cursor-pointer"
           />
         </div>
       </div>
-      {/* <AddandUpdateContact isOpen={} onClose={} /> */}
+      <AddandUpdateContact
+        contact={contact}
+        isUpdate
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </>
   );
 };
