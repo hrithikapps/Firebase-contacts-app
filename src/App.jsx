@@ -10,11 +10,11 @@ import AddandUpdateContact from "./components/AddandUpdateContact";
 import useDiscloser from "./hooks/useDiscloser";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import NotfoundContact from "./components/NotfoundContact";
 
 const App = () => {
   const [contacts, setContact] = useState([]);
-//Using custom hook useDiscloser to maintain code quality
+  //Using custom hook useDiscloser to maintain code quality
   const { isOpen, onOpen, onClose } = useDiscloser();
 
   useEffect(() => {
@@ -77,9 +77,14 @@ const App = () => {
           />
         </div>
         <div className="mt-4 flex flex-col gap-2 ">
-          {contacts.map((contact) => (
-            <ContactCard key={contact.id} contact={contact} />
-          ))}
+          {contacts.length <= 0 ? (
+            <NotfoundContact />
+          ) : (
+            //Conditional rendering for displaying components if there are no contacts
+            contacts.map((contact) => (
+              <ContactCard key={contact.id} contact={contact} />
+            ))
+          )}
         </div>
       </div>
       <AddandUpdateContact isOpen={isOpen} onClose={onClose} />
